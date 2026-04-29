@@ -1,17 +1,21 @@
-//
-//  ZiveApp.swift
-//  Zive
-//
-//  Created by yangyang on 2026/4/22.
-//
 
 import SwiftUI
 
 @main
 struct ZiveApp: App {
+    init() {
+        if !QeixbgBriwyState.qeixbgBriwyDidSeedLocalData {
+            ZiveLocalSeedFactory.ziveLocalSeedFactoryInitializeAllData()
+            QeixbgBriwyState.qeixbgBriwyDidSeedLocalData = true
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack{
+                WeioZwivbeRoute()
+            }
+            
         }
     }
 }
