@@ -115,7 +115,7 @@ struct WeioZwivbeRoute: View {
                     CBnxweZIsPresented: $cbnxweZGoLogCenter.CBnxweZGoLogIsPresented
                 ) {
                     QeixbgBriwyState.qeixbgBriwyCurrentUserId = ""
-                    weioZwivbeNavigator.weioZwivbePush(.skillProgressionSignIn)
+                    weioZwivbeNavigator.weioZwivbePresentRoot(.eiwoqcZceioGuide)
                 }
                 .zIndex(200)
             }

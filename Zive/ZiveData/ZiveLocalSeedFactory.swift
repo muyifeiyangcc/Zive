@@ -1,6 +1,20 @@
 import Foundation
 
 enum ZiveLocalSeedFactory {
+    private static let ziveLocalSeedFactoryAssetBaseURL = "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026"
+
+    private static func ziveLocalSeedFactoryAvatarURL(_ ziveLocalSeedFactoryIndex: Int) -> String {
+        "\(ziveLocalSeedFactoryAssetBaseURL)/ZIVEAEAvat_\(ziveLocalSeedFactoryIndex).jpg"
+    }
+
+    private static func ziveLocalSeedFactoryDanceCoverURL(_ ziveLocalSeedFactoryIndex: Int) -> String {
+        "\(ziveLocalSeedFactoryAssetBaseURL)/ZIVEWUADance_cover_\(ziveLocalSeedFactoryIndex).png"
+    }
+
+    private static func ziveLocalSeedFactoryDanceVideoURL(_ ziveLocalSeedFactoryIndex: Int) -> String {
+        "\(ziveLocalSeedFactoryAssetBaseURL)/ZIVEWUADance_\(ziveLocalSeedFactoryIndex).mp4"
+    }
+
     static func ziveLocalSeedFactoryInitializeAllData() {
         let ziveLocalSeedFactoryUserStore = OrbitUserStore()
         let ziveLocalSeedFactoryVideoStore = ReelVideoStore()
@@ -30,7 +44,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_001",
                 orbitUserEmail: "zive@gmail.com",
                 orbitUserPassword: "123456",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_0.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(0),
                 orbitUserName: "Norris",
                 orbitUserFollowerIds: ["user_002", "user_003"],
                 orbitUserFollowingIds: ["user_002"],
@@ -43,7 +57,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_002",
                 orbitUserEmail: "xcei28sh@gmail.com",
                 orbitUserPassword: "h498hdak4r",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_1.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(1),
                 orbitUserName: "Perry",
                 orbitUserFollowerIds: ["user_001"],
                 orbitUserFollowingIds: ["user_001"],
@@ -56,7 +70,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_003",
                 orbitUserEmail: "Reed@gmail.com",
                 orbitUserPassword: "asdwReed",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_2.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(2),
                 orbitUserName: "Reed",
                 orbitUserFollowerIds: [],
                 orbitUserFollowingIds: ["user_001"],
@@ -69,7 +83,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_004",
                 orbitUserEmail: "Anitaasdw@gmail.com",
                 orbitUserPassword: "3ujd8ahc",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_3.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(3),
                 orbitUserName: "Anita",
                 orbitUserFollowerIds: [],
                 orbitUserFollowingIds: [],
@@ -82,7 +96,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_005",
                 orbitUserEmail: "Larissaasd@gmail.com",
                 orbitUserPassword: "h498hdak4r",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_4.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(4),
                 orbitUserName: "Larissa",
                 orbitUserFollowerIds: [],
                 orbitUserFollowingIds: [],
@@ -95,7 +109,7 @@ enum ZiveLocalSeedFactory {
                 id: "user_006",
                 orbitUserEmail: "xcwj3ish@gmail.com",
                 orbitUserPassword: "ac82halkxc",
-                orbitUserAvatar: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEAEAvat_5.jpg",
+                orbitUserAvatar: ziveLocalSeedFactoryAvatarURL(5),
                 orbitUserName: "Patty",
                 orbitUserFollowerIds: [],
                 orbitUserFollowingIds: [],
@@ -112,8 +126,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_001",
                 reelVideoPublisherId: "user_001",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_0.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_0.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(0),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(0),
                 reelVideoContent: "this dance already a year old",
                 reelVideoLikeCount: 352,
                 reelVideoGiftValue: 0
@@ -121,8 +135,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_002",
                 reelVideoPublisherId: "user_002",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_1.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_1.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(1),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(1),
                 reelVideoContent: "this one so smooth",
                 reelVideoLikeCount: 854,
                 reelVideoGiftValue: 0
@@ -130,8 +144,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_003",
                 reelVideoPublisherId: "user_003",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_2.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_2.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(2),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(2),
                 reelVideoContent: "Finally, we all got together to perform this dance.",
                 reelVideoLikeCount: 613,
                 reelVideoGiftValue: 0
@@ -139,8 +153,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_004",
                 reelVideoPublisherId: "user_004",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_3.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_3.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(3),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(3),
                 reelVideoContent: "What do you think of this dance?",
                 reelVideoLikeCount: 96,
                 reelVideoGiftValue: 0
@@ -148,8 +162,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_005",
                 reelVideoPublisherId: "user_005",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_4.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_4.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(4),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(4),
                 reelVideoContent: "cause I love this dance so much",
                 reelVideoLikeCount: 362,
                 reelVideoGiftValue: 0
@@ -157,8 +171,8 @@ enum ZiveLocalSeedFactory {
             ReelVideoModel(
                 id: "video_006",
                 reelVideoPublisherId: "user_006",
-                reelVideoCoverUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_cover_5.png",
-                reelVideoUrl: "http://huanniuchat.oss-accelerate.aliyuncs.com/Zive2026/ZIVEWUADance_5.mp4",
+                reelVideoCoverUrl: ziveLocalSeedFactoryDanceCoverURL(5),
+                reelVideoUrl: ziveLocalSeedFactoryDanceVideoURL(5),
                 reelVideoContent: "My current favorite song so felt fitting",
                 reelVideoLikeCount: 124,
                 reelVideoGiftValue: 0
