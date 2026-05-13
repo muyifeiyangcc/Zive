@@ -20,20 +20,20 @@ struct BeatNestSettings: View {
                     .padding(.top, 12)
 
                 VStack(spacing: 15) {
-                    beatNestSettingsRow(title: "Blacklist") {
+                    beatNestSettingsRow(title: "c30548121139617d35d0c4820cd8cc0b".grooveCipherAESDecrypt()) {
                         weioZwivbeNavigator.weioZwivbePush(.blockBeatRoster)
                     }
 
-                    beatNestSettingsRow(title: "Privacy Policy") {
-                        weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("https://app.8acgspbj.link/privacy"))
+                    beatNestSettingsRow(title: "a4f27d37b5b103ca95dd63121fafa3cd".grooveCipherAESDecrypt()) {
+                        weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("234134a38cb97bfc9ac9197dad451a22c7798ce7a7d729583e7c7d8fe2bbcb89370552b5fd79dedf69202a3890f0417a".grooveCipherAESDecrypt()))
                     }
-                    beatNestSettingsRow(title: "User Agreement") {
-                        weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("https://app.8acgspbj.link/users"))
+                    beatNestSettingsRow(title: "4d5b130954398e160834ad10b538d92f".grooveCipherAESDecrypt()) {
+                        weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("234134a38cb97bfc9ac9197dad451a22fdf99b352d9bf551bb196dd79f385219".grooveCipherAESDecrypt()))
                     }
-                    beatNestSettingsRow(title: "Delete Account") {
+                    beatNestSettingsRow(title: "bd28b8fc8547d889b87b590e174631c4".grooveCipherAESDecrypt()) {
                         beatNestSettingsShowDeleteAccountDialog = true
                     }
-                    beatNestSettingsRow(title: "Log Out") {
+                    beatNestSettingsRow(title: "1574fbc1646976468bbd507034a08305".grooveCipherAESDecrypt()) {
                         beatNestSettingsLogOut()
                     }
                 }

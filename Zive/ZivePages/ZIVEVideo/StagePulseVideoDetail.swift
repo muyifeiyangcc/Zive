@@ -10,7 +10,14 @@ struct StagePulseVideoDetail: View {
     @State private var stagePulseVideoDetailSelectedGift: StagePulseGiftOption?
     @State private var stagePulseVideoDetailPlayer: AVPlayer?
     @State private var stagePulseVideoDetailIsPlaying = false
+    @State private var stagePulseVideoDetailIsPreparingVideo = true
+    @State private var stagePulseVideoDetailIsVideoReady = false
     @State private var stagePulseVideoDetailLoopObserver: NSObjectProtocol?
+    @State private var stagePulseVideoDetailPlayerStatusObserver: NSKeyValueObservation?
+    @State private var stagePulseVideoDetailPlayerKeepUpObserver: NSKeyValueObservation?
+    @State private var stagePulseVideoDetailPlayerBufferEmptyObserver: NSKeyValueObservation?
+    @State private var stagePulseVideoDetailFirstFrameTask: Task<Void, Never>?
+    @State private var stagePulseVideoDetailLoadingTimeoutTask: Task<Void, Never>?
     @EnvironmentObject private var stagePulseVideoDetailNavigator: WeioZwivbeNavigator
     @EnvironmentObject private var stagePulseVideoDetailActionSheetCenter: TraceGlowActionSheetCenter
     @EnvironmentObject private var stagePulseVideoDetailUserStore: OrbitUserStore
@@ -30,7 +37,12 @@ struct StagePulseVideoDetail: View {
                 Spacer()
             }
 
-            if !stagePulseVideoDetailIsPlaying {
+            if stagePulseVideoDetailIsPreparingVideo {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .tint(.white)
+                    .scaleEffect(1.35)
+            } else if !stagePulseVideoDetailIsPlaying {
                 Image("ZIVEPlay")
                     .resizable()
                     .scaledToFit()
@@ -87,6 +99,8 @@ struct StagePulseVideoDetail: View {
         .onDisappear {
             stagePulseVideoDetailPlayer?.pause()
             stagePulseVideoDetailIsPlaying = false
+            stagePulseVideoDetailClearLoadingTasks()
+            stagePulseVideoDetailClearPlayerObservers()
             if let stagePulseVideoDetailLoopObserver {
                 NotificationCenter.default.removeObserver(stagePulseVideoDetailLoopObserver)
                 self.stagePulseVideoDetailLoopObserver = nil
@@ -99,22 +113,25 @@ struct StagePulseVideoDetail: View {
         ZStack (alignment: .bottom){
             GeometryReader { _ in
                 ZStack {
-                    if let stagePulseVideoDetailPlayer {
+                    ZiveSmartImage(
+                        ziveSmartImagePath: stagePulseVideoDetailVideo?.reelVideoCoverUrl ?? ""
+                    ) {
+                        Color.black
+                    }
+                    .ignoresSafeArea()
+                    Color.black.opacity(0.5)
+
+                    if let stagePulseVideoDetailPlayer,
+                       stagePulseVideoDetailIsVideoReady {
                         StagePulseVideoDetailPlayerView(stagePulseVideoDetailPlayer: stagePulseVideoDetailPlayer)
                             .ignoresSafeArea()
-                    } else {
-                        ZiveSmartImage(
-                            ziveSmartImagePath: stagePulseVideoDetailVideo?.reelVideoCoverUrl ?? ""
-                        ) {
-                            Image("ZIVEGuideBg")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        }
-                        .ignoresSafeArea()
                     }
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
+                    guard stagePulseVideoDetailIsVideoReady else {
+                        return
+                    }
                     stagePulseVideoDetailTogglePlayback()
                 }
             }
@@ -321,22 +338,154 @@ struct StagePulseVideoDetail: View {
             stagePulseVideoDetailPlayer?.pause()
             stagePulseVideoDetailPlayer = nil
             stagePulseVideoDetailIsPlaying = false
+            stagePulseVideoDetailIsPreparingVideo = false
+            stagePulseVideoDetailIsVideoReady = false
+            stagePulseVideoDetailClearLoadingTasks()
+            stagePulseVideoDetailClearPlayerObservers()
             return
         }
 
         if let stagePulseVideoDetailCurrentAsset = stagePulseVideoDetailPlayer?.currentItem?.asset as? AVURLAsset,
            stagePulseVideoDetailCurrentAsset.url == stagePulseVideoDetailResolvedVideoUrl {
-            stagePulseVideoDetailPlayer?.play()
-            stagePulseVideoDetailIsPlaying = true
+            if stagePulseVideoDetailIsVideoReady {
+                stagePulseVideoDetailPlayer?.play()
+                stagePulseVideoDetailIsPlaying = true
+                stagePulseVideoDetailIsPreparingVideo = false
+            }
             return
         }
 
-        let stagePulseVideoDetailPlayerItem = AVPlayerItem(url: stagePulseVideoDetailResolvedVideoUrl)
+        stagePulseVideoDetailPlayer?.pause()
+        stagePulseVideoDetailClearLoadingTasks()
+        stagePulseVideoDetailClearPlayerObservers()
+        stagePulseVideoDetailIsPreparingVideo = true
+        stagePulseVideoDetailIsVideoReady = false
+        stagePulseVideoDetailIsPlaying = false
+
+        let stagePulseVideoDetailAsset = AVURLAsset(
+            url: stagePulseVideoDetailResolvedVideoUrl,
+            options: [
+                AVURLAssetPreferPreciseDurationAndTimingKey: false
+            ]
+        )
+        let stagePulseVideoDetailPlayerItem = AVPlayerItem(asset: stagePulseVideoDetailAsset)
+        stagePulseVideoDetailPlayerItem.preferredForwardBufferDuration = stagePulseVideoDetailResolvedVideoUrl.isFileURL ? 0 : 2
+
         let stagePulseVideoDetailNewPlayer = AVPlayer(playerItem: stagePulseVideoDetailPlayerItem)
+        stagePulseVideoDetailNewPlayer.automaticallyWaitsToMinimizeStalling = true
         stagePulseVideoDetailInstallLoopObserver(for: stagePulseVideoDetailPlayerItem, player: stagePulseVideoDetailNewPlayer)
-        stagePulseVideoDetailNewPlayer.play()
         stagePulseVideoDetailPlayer = stagePulseVideoDetailNewPlayer
-        stagePulseVideoDetailIsPlaying = true
+
+        stagePulseVideoDetailStartLoadingTimeout(for: stagePulseVideoDetailPlayerItem)
+        stagePulseVideoDetailPlayerStatusObserver = stagePulseVideoDetailPlayerItem.observe(
+            \.status,
+            options: [.initial, .new]
+        ) { _, _ in
+            DispatchQueue.main.async {
+                switch stagePulseVideoDetailPlayerItem.status {
+                case .readyToPlay:
+                    stagePulseVideoDetailIsVideoReady = true
+                    stagePulseVideoDetailNewPlayer.play()
+                    stagePulseVideoDetailIsPlaying = true
+                    if stagePulseVideoDetailPlayerItem.isPlaybackLikelyToKeepUp
+                        || stagePulseVideoDetailResolvedVideoUrl.isFileURL {
+                        stagePulseVideoDetailHideLoadingAfterFirstFrame()
+                    }
+                case .failed:
+                    stagePulseVideoDetailIsPreparingVideo = false
+                    stagePulseVideoDetailIsVideoReady = false
+                    stagePulseVideoDetailIsPlaying = false
+                case .unknown:
+                    stagePulseVideoDetailIsPreparingVideo = true
+                    stagePulseVideoDetailIsVideoReady = false
+                    stagePulseVideoDetailIsPlaying = false
+                @unknown default:
+                    stagePulseVideoDetailIsPreparingVideo = false
+                    stagePulseVideoDetailIsVideoReady = false
+                    stagePulseVideoDetailIsPlaying = false
+                }
+            }
+        }
+        stagePulseVideoDetailPlayerKeepUpObserver = stagePulseVideoDetailPlayerItem.observe(
+            \.isPlaybackLikelyToKeepUp,
+            options: [.new]
+        ) { _, _ in
+            DispatchQueue.main.async {
+                guard stagePulseVideoDetailPlayerItem.status == .readyToPlay,
+                      stagePulseVideoDetailPlayerItem.isPlaybackLikelyToKeepUp else {
+                    return
+                }
+
+                stagePulseVideoDetailIsVideoReady = true
+                stagePulseVideoDetailNewPlayer.play()
+                stagePulseVideoDetailIsPlaying = true
+                stagePulseVideoDetailHideLoadingAfterFirstFrame()
+            }
+        }
+        stagePulseVideoDetailPlayerBufferEmptyObserver = stagePulseVideoDetailPlayerItem.observe(
+            \.isPlaybackBufferEmpty,
+            options: [.new]
+        ) { _, _ in
+            DispatchQueue.main.async {
+                if stagePulseVideoDetailPlayerItem.isPlaybackBufferEmpty,
+                   !stagePulseVideoDetailResolvedVideoUrl.isFileURL {
+                    stagePulseVideoDetailIsPreparingVideo = true
+                }
+            }
+        }
+    }
+
+    private func stagePulseVideoDetailHideLoadingAfterFirstFrame() {
+        stagePulseVideoDetailFirstFrameTask?.cancel()
+        stagePulseVideoDetailFirstFrameTask = Task {
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            guard !Task.isCancelled else {
+                return
+            }
+
+            await MainActor.run {
+                guard stagePulseVideoDetailIsVideoReady else {
+                    return
+                }
+
+                stagePulseVideoDetailIsPreparingVideo = false
+            }
+        }
+    }
+
+    private func stagePulseVideoDetailStartLoadingTimeout(for stagePulseVideoDetailPlayerItem: AVPlayerItem) {
+        stagePulseVideoDetailLoadingTimeoutTask?.cancel()
+        stagePulseVideoDetailLoadingTimeoutTask = Task {
+            try? await Task.sleep(nanoseconds: 8_000_000_000)
+            guard !Task.isCancelled else {
+                return
+            }
+
+            await MainActor.run {
+                guard stagePulseVideoDetailIsPreparingVideo,
+                      stagePulseVideoDetailPlayer?.currentItem === stagePulseVideoDetailPlayerItem else {
+                    return
+                }
+
+                stagePulseVideoDetailIsPreparingVideo = false
+                stagePulseVideoDetailIsVideoReady = stagePulseVideoDetailPlayerItem.status == .readyToPlay
+                stagePulseVideoDetailIsPlaying = false
+                stagePulseVideoDetailPlayer?.pause()
+            }
+        }
+    }
+
+    private func stagePulseVideoDetailClearLoadingTasks() {
+        stagePulseVideoDetailFirstFrameTask?.cancel()
+        stagePulseVideoDetailFirstFrameTask = nil
+        stagePulseVideoDetailLoadingTimeoutTask?.cancel()
+        stagePulseVideoDetailLoadingTimeoutTask = nil
+    }
+
+    private func stagePulseVideoDetailClearPlayerObservers() {
+        stagePulseVideoDetailPlayerStatusObserver = nil
+        stagePulseVideoDetailPlayerKeepUpObserver = nil
+        stagePulseVideoDetailPlayerBufferEmptyObserver = nil
     }
 
     private func stagePulseVideoDetailTogglePlayback() {

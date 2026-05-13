@@ -74,23 +74,23 @@ struct EiwoqcZceioGuide: View {
     private var eiwoqcZceioGuideActionArea: some View {
         VStack(spacing: 0) {
             VStack(spacing: 40) {
-                eiwoqcZceioGuideButton(title: "Login by email")
-                eiwoqcZceioGuideButton(title: "I’m new")
+                eiwoqcZceioGuideButton(title: "3c4a975e21ee38e17d346489c01491ab".grooveCipherAESDecrypt())
+                eiwoqcZceioGuideButton(title: "8bd3d5c05d338d56f34a0c6437b4e7bc".grooveCipherAESDecrypt())
             }
 
             VStack(spacing: 18) {
                 HStack(spacing: 4) {
-                    Text("Don’t have an account?")
+                    Text("6831128d394ee0259b2083f1310b258a48efda8e12e3e9c02817d7fe62acbe97".grooveCipherAESDecrypt())
                         .font(ZiveStyle.FontBook.regular(14))
                         .foregroundStyle(ZiveStyle.ColorPalette.white.opacity(0.82))
 
-                    Button("Sign up") {
+                    Button("aff99501866f5e9757bd9074237abc8f".grooveCipherAESDecrypt()) {
                         if !eiwoqcZceioIsAgreeEula {
                             eiwoqcZceioGuideShowEULA = true
                             return
                         }
                         if !eiwoqcZceioGuideAgreeTerms {
-                            eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "Please read and agree to the User Agreement and Privacy Policy first.")
+                            eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "3139890dcd5639454dcb6646e2f92ba31a22b8d33715ca4997800f708779abf664e3ccd1f15b70386e3f33ecba3acc81066eaf1ea1122c05a6f34783902aa7e6558ddcdaeb567d90958fd3372c465911".grooveCipherAESDecrypt())
                             return
                         }
                         weioZwivbeNavigator.weioZwivbePush(.skillProgressionSignUp)
@@ -127,24 +127,24 @@ struct EiwoqcZceioGuide: View {
 
     private var eiwoqcZceioGuideAgreementText: some View {
         HStack(spacing: 0) {
-            Text("Agree with ")
+            Text("1599fb76853a1bb579c2a2ebed6dda29".grooveCipherAESDecrypt())
                 .font(ZiveStyle.FontBook.regular(11))
                 .foregroundStyle(ZiveStyle.ColorPalette.white.opacity(0.7))
 
-            Button("User Agreement") {
-                weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("https://app.8acgspbj.link/users"))
+            Button("4d5b130954398e160834ad10b538d92f".grooveCipherAESDecrypt()) {
+                weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("234134a38cb97bfc9ac9197dad451a22fdf99b352d9bf551bb196dd79f385219".grooveCipherAESDecrypt()))
             }
                 .buttonStyle(.plain)
                 .font(ZiveStyle.FontBook.regular(11))
                 .foregroundStyle(ZiveStyle.ColorPalette.white.opacity(0.86))
                 .underline()
 
-            Text(" and ")
+            Text("83cf82c8da5d3c120db805f8f17efe31".grooveCipherAESDecrypt())
                 .font(ZiveStyle.FontBook.regular(11))
                 .foregroundStyle(ZiveStyle.ColorPalette.white.opacity(0.7))
 
-            Button("Privacy Policy") {
-                weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("https://app.8acgspbj.link/privacy"))
+            Button("a4f27d37b5b103ca95dd63121fafa3cd".grooveCipherAESDecrypt()) {
+                weioZwivbeNavigator.weioZwivbePush(.sedivaoBeiwWeb("234134a38cb97bfc9ac9197dad451a22c7798ce7a7d729583e7c7d8fe2bbcb89370552b5fd79dedf69202a3890f0417a".grooveCipherAESDecrypt()))
             }
                 .buttonStyle(.plain)
                 .font(ZiveStyle.FontBook.regular(11))
@@ -162,7 +162,7 @@ struct EiwoqcZceioGuide: View {
                         return
                     }
                     if !eiwoqcZceioGuideAgreeTerms {
-                        eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "Please read and agree to the User Agreement and Privacy Policy first.")
+                        eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "3139890dcd5639454dcb6646e2f92ba31a22b8d33715ca4997800f708779abf664e3ccd1f15b70386e3f33ecba3acc81066eaf1ea1122c05a6f34783902aa7e6558ddcdaeb567d90958fd3372c465911".grooveCipherAESDecrypt())
                         return
                     }
                     weioZwivbeNavigator.weioZwivbePush(.skillProgressionSignIn)
@@ -177,7 +177,7 @@ struct EiwoqcZceioGuide: View {
                         return
                     }
                     if !eiwoqcZceioGuideAgreeTerms {
-                        eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "Please read and agree to the User Agreement and Privacy Policy first.")
+                        eiwoqcZeicLoToast.ziveGlobalFeedbackShowToast(text: "3139890dcd5639454dcb6646e2f92ba31a22b8d33715ca4997800f708779abf664e3ccd1f15b70386e3f33ecba3acc81066eaf1ea1122c05a6f34783902aa7e6558ddcdaeb567d90958fd3372c465911".grooveCipherAESDecrypt())
                         return
                     }
                     Task {

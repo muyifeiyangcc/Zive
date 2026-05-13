@@ -14,22 +14,22 @@ enum SkillProgressionSignMode {
     var title: String {
         switch self {
         case .signIn:
-            return "Sign in"
+            return SkillProgressionSignCipherText.signIn.grooveCipherAESDecrypt()
         case .signUp:
-            return "Sign up"
+            return SkillProgressionSignCipherText.signUp.grooveCipherAESDecrypt()
         case .forgotPassword:
-            return "Forgot password"
+            return SkillProgressionSignCipherText.forgotPassword.grooveCipherAESDecrypt()
         }
     }
 
     var buttonTitle: String {
         switch self {
         case .signIn:
-            return "Sign in"
+            return SkillProgressionSignCipherText.signIn.grooveCipherAESDecrypt()
         case .signUp:
-            return "Sign up"
+            return SkillProgressionSignCipherText.signUp.grooveCipherAESDecrypt()
         case .forgotPassword:
-            return "Reset password"
+            return SkillProgressionSignCipherText.resetPassword.grooveCipherAESDecrypt()
         }
     }
 
@@ -43,6 +43,32 @@ enum SkillProgressionSignMode {
             return 349
         }
     }
+}
+
+private enum SkillProgressionSignCipherText {
+    static let signIn = "ae764d45d6ecb20bca525f6bbc1ad057"
+    static let signUp = "aff99501866f5e9757bd9074237abc8f"
+    static let forgotPassword = "190dea8068477ccb579f542616f93705"
+    static let resetPassword = "40bf40177689b8ced4c8f15fece9e092"
+    static let emailLabel = "51e73e7c66565edc3152226da3b327c7"
+    static let enterEmailAddress = "91a13a871f3f50888419a39784664ba70300fcd1a7ce9b966d362181c7583efb"
+    static let passwordLabel = "098e53518caea2b12bf715d11c1aa525"
+    static let forgotUpper = "f755cf2deb2baf4a7511105ec1c6c9fa"
+    static let enterPassword = "cfa6bed1ee392b65ad371dbb0b3efea8"
+    static let confirmPasswordLabel = "7ab2061ec491713f2efd3bc91eda560aa8c6d5273188f80c310a63bc6060a634"
+    static let enterPasswordAgain = "09e9127a1c08d0f08e34f346a21c9ecf7423eb844d4f842cbd291d521b5d454f"
+    static let emailCannotBeEmpty = "eeb53957a06e397aa59f50c910cc24c4484a6b360b588552615acffc21edce23"
+    static let pleaseEnterValidEmail = "2942bcb609858aaddd4f5a57f158c1013a2e34f78a693b12cfc7100d65d3717c492f0724f8848b336347a333531c6e5d"
+    static let passwordCannotBeEmpty = "873818e887a30fb3011daa261958f5c5bff20ded65a1350046630e60876a63f9"
+    static let incorrectEmailOrPassword = "9392ff91011a2a845965301d3306f84f5acfec6f66cf83c8c0fe66ae116c7772"
+    static let signingInLoading = "f28ebd2fc4fc77ffb1522eeadeb05cf6"
+    static let passwordFieldsCannotBeEmpty = "2d348c3aed8c4cda35ed38ea6cedb755081bf590e7900e7d97442f74b358d2ec"
+    static let passwordAtLeast3 = "691c0a3a5774e246c7e7d454610f4e0e7980aed086b458847c300385cae503df93c306a0516dc38f85d79d1213b2782f"
+    static let twoPasswordsDoNotMatch = "cd060b525aef0a2d183be121e79646d4bd56b4ec8faafb0bbe6464705e371836"
+    static let emailAlreadyRegistered = "ce82b40db4ae1305e0d62573aa826828dbfeb24e0d8bc272262d54a38b26d3b69d28c5895b85a6366858a86442e7f79d"
+    static let passwordAtLeast6 = "691c0a3a5774e246c7e7d454610f4e0e35a59f339aa762c19b94a31e531be1875ef96d46adb73f3ebf16c15021206c59"
+    static let emailNotRegistered = "e815bb5b1d09371d7d3ed13190326f973722cc2e3b4082f68e83895c602e0e3f"
+    static let passwordResetSuccessful = "6bec44b05a51b29b29b8523446b566a72fd5f719c8865b4c824892a6b1d4f153"
 }
 
 struct SkillProgressionSign: View {
@@ -124,12 +150,12 @@ struct SkillProgressionSign: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Email:")
+                    Text(SkillProgressionSignCipherText.emailLabel.grooveCipherAESDecrypt())
                         .font(ZiveStyle.FontBook.boldItalic(20))
                         .foregroundStyle(ZiveStyle.ColorPalette.textPrimary)
 
                     ZiveTextField(
-                        placeholder: "Enter email address",
+                        placeholder: SkillProgressionSignCipherText.enterEmailAddress.grooveCipherAESDecrypt(),
                         text: $skillProgressionSignEmail,
                         isFocused: skillProgressionSignFocusField == .email,
                         focusState: $skillProgressionSignFocusField,
@@ -139,14 +165,14 @@ struct SkillProgressionSign: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("Password:")
+                        Text(SkillProgressionSignCipherText.passwordLabel.grooveCipherAESDecrypt())
                             .font(ZiveStyle.FontBook.boldItalic(20))
                             .foregroundStyle(ZiveStyle.ColorPalette.textPrimary)
 
                         Spacer()
 
                         if skillProgressionSignMode == .signIn {
-                            Button("FORGOT?") {
+                            Button(SkillProgressionSignCipherText.forgotUpper.grooveCipherAESDecrypt()) {
                                 skillProgressionSignMode = .forgotPassword
                                 skillProgressionSignFocusField = .email
                             }
@@ -157,7 +183,7 @@ struct SkillProgressionSign: View {
                     }
 
                     ZiveSecureField(
-                        placeholder: "Enter password",
+                        placeholder: SkillProgressionSignCipherText.enterPassword.grooveCipherAESDecrypt(),
                         text: $skillProgressionSignPassword,
                         isFocused: skillProgressionSignFocusField == .password,
                         focusState: $skillProgressionSignFocusField,
@@ -167,12 +193,12 @@ struct SkillProgressionSign: View {
 
                 if skillProgressionSignMode != .signIn {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Confirm password:")
+                        Text(SkillProgressionSignCipherText.confirmPasswordLabel.grooveCipherAESDecrypt())
                             .font(ZiveStyle.FontBook.boldItalic(20))
                             .foregroundStyle(ZiveStyle.ColorPalette.textPrimary)
 
                         ZiveSecureField(
-                            placeholder: "Enter password again",
+                            placeholder: SkillProgressionSignCipherText.enterPasswordAgain.grooveCipherAESDecrypt(),
                             text: $skillProgressionSignRePassword,
                             isFocused: skillProgressionSignFocusField == .rePassword,
                             focusState: $skillProgressionSignFocusField,
@@ -197,7 +223,7 @@ struct SkillProgressionSign: View {
 
         guard !skillProgressionSignEmail.isEmpty else {
             ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                text: "Email cannot be empty",
+                text: SkillProgressionSignCipherText.emailCannotBeEmpty.grooveCipherAESDecrypt(),
                 status: .error
             )
             return
@@ -207,7 +233,7 @@ struct SkillProgressionSign: View {
         case .signIn:
             guard skillProgressionSignValidateEmail(skillProgressionSignEmail) else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Please enter a valid email address",
+                    text: SkillProgressionSignCipherText.pleaseEnterValidEmail.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -217,7 +243,7 @@ struct SkillProgressionSign: View {
 
             guard !skillProgressionSignPassword.isEmpty else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Password cannot be empty",
+                    text: SkillProgressionSignCipherText.passwordCannotBeEmpty.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -228,7 +254,7 @@ struct SkillProgressionSign: View {
                 password: skillProgressionSignPassword
             ) else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Incorrect email or password",
+                    text: SkillProgressionSignCipherText.incorrectEmailOrPassword.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -238,7 +264,7 @@ struct SkillProgressionSign: View {
             QeixbgBriwyState.qeixbgBriwyCurrentUserId = skillProgressionSignUserModel.id
 
             await skillProgressionSignPerformSuccessTransition(
-                loadingText: "Signing in..."
+                loadingText: SkillProgressionSignCipherText.signingInLoading.grooveCipherAESDecrypt()
             )
             skillProgreNavi.weioZwivbePresentRoot(.pulseVistaHome)
 
@@ -246,7 +272,7 @@ struct SkillProgressionSign: View {
             guard !skillProgressionSignPassword.isEmpty,
                   !skillProgressionSignRePassword.isEmpty else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Password fields cannot be empty",
+                    text: SkillProgressionSignCipherText.passwordFieldsCannotBeEmpty.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -254,7 +280,7 @@ struct SkillProgressionSign: View {
 
             guard skillProgressionSignPassword.count >= 3 else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Password must be at least 3 characters",
+                    text: SkillProgressionSignCipherText.passwordAtLeast3.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -262,7 +288,7 @@ struct SkillProgressionSign: View {
 
             guard skillProgressionSignPassword == skillProgressionSignRePassword else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "The two passwords do not match",
+                    text: SkillProgressionSignCipherText.twoPasswordsDoNotMatch.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -270,7 +296,7 @@ struct SkillProgressionSign: View {
 
             guard !skillProgressionSignUserStore.orbitUserEmailExists(skillProgressionSignEmail) else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "This email is already registered",
+                    text: SkillProgressionSignCipherText.emailAlreadyRegistered.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -285,7 +311,7 @@ struct SkillProgressionSign: View {
         case .forgotPassword:
             guard skillProgressionSignValidateEmail(skillProgressionSignEmail) else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Please enter a valid email address",
+                    text: SkillProgressionSignCipherText.pleaseEnterValidEmail.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -294,7 +320,7 @@ struct SkillProgressionSign: View {
             guard !skillProgressionSignPassword.isEmpty,
                   !skillProgressionSignRePassword.isEmpty else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Password fields cannot be empty",
+                    text: SkillProgressionSignCipherText.passwordFieldsCannotBeEmpty.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -302,7 +328,7 @@ struct SkillProgressionSign: View {
 
             guard skillProgressionSignPassword.count >= 6 else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "Password must be at least 6 characters",
+                    text: SkillProgressionSignCipherText.passwordAtLeast6.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -310,7 +336,7 @@ struct SkillProgressionSign: View {
 
             guard skillProgressionSignPassword == skillProgressionSignRePassword else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "The two passwords do not match",
+                    text: SkillProgressionSignCipherText.twoPasswordsDoNotMatch.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
@@ -321,14 +347,14 @@ struct SkillProgressionSign: View {
                 newPassword: skillProgressionSignPassword
             ) else {
                 ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                    text: "This email is not registered",
+                    text: SkillProgressionSignCipherText.emailNotRegistered.grooveCipherAESDecrypt(),
                     status: .error
                 )
                 return
             }
 
             ziveGlobalFeedbackCenter.ziveGlobalFeedbackShowToast(
-                text: "Password reset successful",
+                text: SkillProgressionSignCipherText.passwordResetSuccessful.grooveCipherAESDecrypt(),
                 status: .success
             )
             skillProgreNavi.weioZwivbeReplaceStack(with: .skillProgressionSignIn)

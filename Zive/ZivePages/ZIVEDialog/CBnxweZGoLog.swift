@@ -31,7 +31,7 @@ struct CBnxweZGoLog: View {
                 }
 
             VStack(spacing: 0) {
-                Text("Please log in")
+                Text("daa174597251f048cea71b9cc9cabc30".grooveCipherAESDecrypt())
                     .font(ZiveStyle.FontBook.boldItalic(20))
                     .foregroundStyle(ZiveStyle.ColorPalette.textPrimary)
                     .padding(.top, 24)
